@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <name>Errai::JMS</name>
+    <groupId>org.jboss.errai</groupId>
+    <artifactId>errai-jms</artifactId>
+    <version>1.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <errai.version>1.1-SNAPSHOT</errai.version>
+        <gwt.version>2.0.3</gwt.version>
+    </properties>
+
+    <dependencies>
+
+        <!-- Project Dependencies -->
+        <dependency>
+            <groupId>org.jboss.errai</groupId>
+            <artifactId>errai-bus</artifactId>
+            <!--exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>log4j</groupId>
+                    <artifactId>log4j</artifactId>
+                </exclusion>
+            </exclusions-->
+            <version>${errai.version}</version>
+        </dependency>
+
+        <!--dependency>
+            <groupId>org.jboss.javaee</groupId>
+            <artifactId>jboss-javaee</artifactId>
+            <version>5.0.1.GA</version>
+            <scope>provided</scope>
+        </dependency-->
+
+        <!--dependency>
+            <groupId>org.jboss.naming</groupId>
+            <artifactId>jnp-client</artifactId>
+            <version>5.0.5.Final</version>
+            <scope>provided</scope>
+        </dependency-->
+
+        <dependency>
+            <groupId>org.jboss.jbossas</groupId>
+            <artifactId>jboss-as-client</artifactId>
+            <version>6.0.0.20100216-M2</version>
+            <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--dependency>
+            <groupId>org.jboss.messaging</groupId>
+            <artifactId>jbm-jms-client</artifactId>
+            <version>2.0.0.BETA4</version>
+            <scope>provided</scope>
+        </dependency-->
+
+        <!--
+           GWT
+        -->
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <scope>provided</scope>
+            <version>${gwt.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-dev</artifactId>
+            <scope>provided</scope>
+            <version>${gwt.version}</version>
+        </dependency>
+    </dependencies>
+
+
+    <build>
+        <plugins>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.2-Beta1</version>
+                <configuration>
+                    <executable>java</executable>
+                    <arguments>                       
+                        <argument>-classpath</argument>
+                        <!--
+                        automatically creates the classpath using all project dependencies,
+                        also adding the project build directory
+                        -->
+                        <classpath/>
+                        <argument>org.jboss.errai.cli.PubSubClient</argument>
+
+                    </arguments>
+                </configuration>                
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
+                    <failIfNoTests>false</failIfNoTests>
+                    <trimStackTrace>false</trimStackTrace>
+                    <systemProperties>
+                        <property>
+                            <name>log4j.output.dir</name>
+                            <value>${project.build.directory}</value>
+                        </property>
+                    </systemProperties>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.5</source>
+                    <target>1.5</target>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-install-plugin</artifactId>
+                <version>2.3</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-deploy-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.1-beta-1</version>
+            </plugin>
+
+        </plugins>
+
+    </build>
+
+    <profiles>
+        <profile>
+            <id>client-demo</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.jboss.jbossas</groupId>
+                    <artifactId>jboss-as-client</artifactId>
+                    <version>6.0.0.20100216-M2</version>
+                    <type>pom</type>
+                    <scope>compile</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+    <!-- Repositories -->
+    <repositories>
+        <repository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jboss-deprecated</id>
+            <name>JBoss Deprecated</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/deprecated/</url>
+            <layout>default</layout>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>jboss-public-repository-group</id>
+            <name>JBoss Public Maven Repository Group</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+            <layout>default</layout>
+            <releases>
+                <updatePolicy>never</updatePolicy>
+            </releases>
+            <snapshots>
+                <updatePolicy>never</updatePolicy>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <!-- DistributionManagement -->
+    <distributionManagement>
+        <repository>
+            <id>jboss-releases-repository</id>
+            <name>JBoss Releases Repository</name>
+            <url>https://repository.jboss.org/nexus/service/local/staging/deploy/maven2/</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>jboss-snapshots-repository</id>
+            <name>JBoss Snapshots Repository</name>
+            <url>https://repository.jboss.org/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+
+    </distributionManagement>
+    
+</project>	

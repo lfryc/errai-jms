@@ -4,7 +4,7 @@
     <name>Errai::JMS</name>
     <groupId>org.jboss.errai</groupId>
     <artifactId>errai-jms</artifactId>
-    <version>1.1-SNAPSHOT</version>
+    <version>1.1-SNAPSHOT-brqparty</version>
     <packaging>jar</packaging>
 
     <properties>
